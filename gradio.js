@@ -16,6 +16,9 @@ async function setupGradioClient() {
     console.error("Failed to connect to Gradio client:", error);
   }
 }
+app.get('/', async (req, res) => {
+    res.json({ message: 'Hello, World!' });
+});
 
 app.post('/generate-image', async (req, res) => {
     if (!client) {
