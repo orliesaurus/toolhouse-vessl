@@ -4,12 +4,24 @@ import { Client } from '@gradio/client';
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Middleware to parse JSON bodies
 app.use(express.json());
 
-const client = await Client.connect("https://run-execution-oe12r4vcmuaw-run-execution-7860.oregon.google-cluster.vessl.ai/");
+let client;
+
+async function setupGradioClient() {
+  try {
+    client = await Client.connect("https://run-execution-oe12r4vcmuaw-run-execution-7860.oregon.google-cluster.vessl.ai/");
+    console.log("Connected to Gradio client");
+  } catch (error) {
+    console.error("Failed to connect to Gradio client:", error);
+  }
+}
 
 app.post('/generate-image', async (req, res) => {
+    if (!client) {
+        return res.status(503).json({ error: 'Gradio client not connected' });
+    }
+
     const {
         width = 128,
         height = 128,
@@ -18,7 +30,6 @@ app.post('/generate-image', async (req, res) => {
         seed = "-1",
         prompt = "An Astronaut",
     } = req.body;
-    console.log("req", JSON.stringify(req.body));
 
     try {
         const result = await client.predict("/generate_image", {
@@ -37,6 +48,8 @@ app.post('/generate-image', async (req, res) => {
     }
 });
 
-app.listen(port, () => {
-    console.log(`Microservice listening at port ${port}`);
+setupGradioClient().then(() => {
+    app.listen(port, () => {
+        console.log(`Microservice listening at port ${port}`);
+    });
 });
