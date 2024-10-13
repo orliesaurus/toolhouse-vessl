@@ -6,7 +6,7 @@ tags:
 import:
   /code/:
     git:
-      url: github.com/vessl-ai/examples.git
+      url: github.com/orliesaurus/toolhouse-vessl.git
       ref: main
 resources:
   cluster: vessl-gcp-oregon
