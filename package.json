@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "@gradio/client": "^1.6.0",
+    "express": "latest"
+  }
+}
