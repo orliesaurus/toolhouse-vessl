@@ -18,6 +18,7 @@ app.post('/generate-image', async (req, res) => {
         seed = "-1",
         prompt = "An Astronaut",
     } = req.body;
+    console.log("req", JSON.stringify(req.body));
 
     try {
         const result = await client.predict("/generate_image", {
